@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghostwrite — Our Cultivation Services</title>
+<meta name="description" content="Explore our bespoke Linux operating system services. From custom Plymouth boot splashes to pixel-perfect GTK theming and custom ISO generation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Luxury Palette */
+  --bg-base: #FAFAF8;
+  --bg-surface: #FFFFFF;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  
+  --green-900: #0A1C14;
+  --green-800: #122E21;
+  --green-700: #1B402E;
+  --green-200: #D1E0D7;
+  --green-100: #E8F0EA;
+  
+  --gold-primary: #C5A059;
+  --gold-light: #E6D0A1;
+  --gold-dark: #9A7A3A;
+  
+  --text-main: #122E21;
+  --text-muted: #5C7065;
+  --text-light: #8A9C91;
+
+  --border-light: #E5EBE7;
+  --border-gold: rgba(197, 160, 89, 0.3);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* SUBTLE PAPER NOISE */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* LIVING SYSTEM BACKGROUND BLOBS */
+.organic-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.4;
+  animation: breathe 15s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  top: 5%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--green-200) 0%, transparent 70%);
+}
+
+.blob-2 {
+  top: 60%; right: -20%;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+  animation-delay: -5s;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.1);
+  color: var(--gold-primary);
+}
+
+.logo-icon svg { width: 22px; height: 22px; }
+
+.logo-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--green-900);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.logo-sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--gold-dark);
+}
+
+.btn-nav {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: var(--green-900);
+  color: var(--bg-surface);
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-nav:hover {
+  background: var(--gold-dark);
+}
+
+/* TYPOGRAPHY UTILS */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--green-900);
+}
+
+/* HERO */
+.hero {
+  padding: 12rem 2rem 6rem;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero .eyebrow {
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.2s;
+}
+
+.hero h1 {
+  font-weight: 500;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.4s;
+}
+
+.hero h1 span {
+  font-style: italic;
+  color: var(--gold-dark);
+}
+
+.hero-sub {
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0 auto 3.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.6s;
+}
+
+/* SERVICES DIRECTORY */
+.services-directory {
+  padding: 4rem 2rem 8rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.service-row {
+  display: flex;
+  gap: 5rem;
+  align-items: flex-start;
+  padding: 6rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.service-row:last-child {
+  border-bottom: none;
+}
+
+.service-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 6rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 0.8;
+  flex-shrink: 0;
+  width: 120px;
+}
+
+.service-content {
+  flex: 1;
+}
+
+.service-title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: var(--green-900);
+}
+
+.service-desc {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+}
+
+.service-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.feature-icon {
+  color: var(--gold-dark);
+  margin-top: 4px;
+}
+
+.feature-text {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.feature-sub {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* CTA SECTION */
+.final-cta {
+  padding: 10rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+}
+
+.final-cta h2 {
+  font-weight: 500;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.final-cta p {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 300;
+  margin-bottom: 3.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 16px 36px;
+  background: var(--green-900);
+  color: var(--bg-surface);
+  border: 1px solid var(--green-900);
+  border-radius: 40px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 8px 24px rgba(10, 28, 20, 0.15);
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  box-shadow: 0 12px 32px rgba(154, 122, 58, 0.25);
+  transform: translateY(-2px);
+}
+
+/* FOOTER */
+footer {
+  padding: 4rem 2rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.footer-text a {
+  color: var(--gold-dark);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.footer-text a:hover {
+  border-color: var(--gold-dark);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  header { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 8rem 1.5rem 4rem; }
+  .service-row { flex-direction: column; gap: 2rem; padding: 4rem 0; }
+  .service-number { font-size: 4.5rem; width: auto; }
+  .service-title { font-size: 2rem; }
+  .final-cta { padding: 8rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="organic-blob blob-1"></div>
+<div class="organic-blob blob-2"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9"/><path d="M12 13C8 13 4 9 4 5c4 0 8 4 8 8z"/><path d="M12 13c4 0 8-4 8-8-4 0-8 4-8 8z"/></svg>
+    </div>
+    <div class="logo-text-wrapper">
+      <div class="logo-text">Ghostwrite</div>
+      <div class="logo-sub">Luminous Prosperity</div>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html" class="nav-link">The OS</a>
+    <a href="#services" class="nav-link">Capabilities</a>
+    <a href="mailto:hello@luminousprosperity.com" class="btn-nav">Commission</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="eyebrow">Capabilities & Execution</span>
+  <h1>
+    The anatomy of a<br>
+    <span>living system.</span>
+  </h1>
+  <p class="hero-sub">We don't just change wallpapers. We cultivate your operating system from the deepest roots of the bootloader to the canopy of the desktop shell. Here is how we engineer your environment.</p>
+</section>
+
+<!-- SERVICES DIRECTORY -->
+<section class="services-directory" id="services">
+
+  <!-- SERVICE 01: The Root -->
+  <div class="service-row fade-in">
+    <div class="service-number">01</div>
+    <div class="service-content">
+      <h2 class="service-title">The Root: Boot & Initialization</h2>
+      <p class="service-desc">Your brand identity should emerge the exact moment power flows into the motherboard. We architect the sequence before the system even loads.</p>
+      
+      <div class="service-features">
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <div>
+            <div class="feature-text">Plymouth Splash Animations</div>
+            <div class="feature-sub">Fluid, native boot animations that seamlessly transition from BIOS to login.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <div>
+            <div class="feature-text">Custom GRUB Configuration</div>
+            <div class="feature-sub">Bespoke bootloader menus styled with your typography and colorways.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE 02: The Canopy -->
+  <div class="service-row fade-in">
+    <div class="service-number">02</div>
+    <div class="service-content">
+      <h2 class="service-title">The Canopy: Desktop Environment</h2>
+      <p class="service-desc">The structural framework of your daily operations. We modify GNOME or KDE to adhere exclusively to your workflow logic, removing friction and upstream clutter.</p>
+      
+      <div class="service-features">
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <div>
+            <div class="feature-text">Native Shell Extensions</div>
+            <div class="feature-sub">Custom-written Javascript modules that weave your tools directly into the top bar and system tray.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <div>
+            <div class="feature-text">Bespoke Login Managers</div>
+            <div class="feature-sub">GDM and SDDM screens redesigned to provide an elegant, branded entryway.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE 03: The Flora -->
+  <div class="service-row fade-in">
+    <div class="service-number">03</div>
+    <div class="service-content">
+      <h2 class="service-title">The Flora: Visual Identity & GTK</h2>
+      <p class="service-desc">Pixel-perfect aesthetics mapped across the entire system architecture. Every button, scrollbar, modal, and icon is infused with your bespoke visual language.</p>
+      
+      <div class="service-features">
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          <div>
+            <div class="feature-text">GTK3 & GTK4 Compilations</div>
+            <div class="feature-sub">System-wide CSS theming that ensures applications render in absolute harmony with your brand.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <div>
+            <div class="feature-text">Exclusive Iconography Sets</div>
+            <div class="feature-sub">Custom-drawn SVG icon packs that replace default Linux folders, apps, and system indicators.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE 04: The Harvest -->
+  <div class="service-row fade-in">
+    <div class="service-number">04</div>
+    <div class="service-content">
+      <h2 class="service-title">The Harvest: Packaging & Distribution</h2>
+      <p class="service-desc">A beautiful system is useless if it cannot be deployed. We compile your living ecosystem into secure, scalable distribution formats.</p>
+      
+      <div class="service-features">
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <div class="feature-text">Custom Bootable ISOs</div>
+            <div class="feature-sub">Flash-ready system images containing your OS, ready to be installed on any bare-metal hardware.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <div>
+            <div class="feature-text">Private APT Repositories</div>
+            <div class="feature-sub">Secure, hosted repositories allowing your custom OS to receive over-the-air updates seamlessly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <span class="eyebrow">The Next Step</span>
+  <h2>Begin your cultivation.</h2>
+  <p>Whether you require a single bespoke theme or an entire fleet of custom ISOs, our greenhouse is ready to architect your vision.</p>
+  <a href="mailto:hello@luminousprosperity.com" class="btn-primary">Initiate Contact</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-text">Ghostwrite // A <a href="https://luminousprosperity.com">Luminous Prosperity</a> Initiative &mdash; Providence, RI</p>
+</footer>
+
+<script>
+// Intersection Observer for graceful fade-ins
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
