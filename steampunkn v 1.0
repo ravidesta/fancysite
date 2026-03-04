@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aetherworks OS — Technofantasy Desktop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Bronze Technofantasy Palette */
+  --bg-base: #120F0D;        /* Deep forged iron */
+  --bg-surface: #1E1916;     /* Dark bronze surface */
+  --bg-panel: #2A231E;       /* Elevated bronze */
+  --bg-glass: rgba(30, 25, 22, 0.85);
+  
+  --bronze-light: #D4A373;
+  --bronze-mid: #A07148;
+  --bronze-dark: #5C3D26;
+  
+  --copper-bright: #FF884D;  /* Glowing copper heat */
+  --copper-base: #C85A17;    /* Standard copper */
+  --copper-shadow: #7A3206;
+  
+  --aether-glow: #45B69C;    /* Verdigris/Magic green for active states */
+  --aether-dim: rgba(69, 182, 156, 0.2);
+  
+  --text-main: #F4EBE1;      /* Warm off-white parchment */
+  --text-muted: #B8A89A;     /* Tarnished silver text */
+  --text-dark: #120F0D;
+  
+  --border-light: rgba(212, 163, 115, 0.15);
+  --border-copper: rgba(200, 90, 23, 0.4);
+  
+  /* OS Specific Variables */
+  --shadow-window: 0 32px 64px rgba(0, 0, 0, 0.8), 0 0 24px rgba(200, 90, 23, 0.15);
+  --shadow-glow: 0 0 12px rgba(255, 136, 77, 0.3);
+  --radius-window: 12px;
+  --radius-ui: 6px;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-main);
+  overflow: hidden; 
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  user-select: none; 
+}
+
+/* SUBTLE GRUNGE & GRID NOISE */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: 
+    linear-gradient(rgba(212, 163, 115, 0.03) 1px, transparent 1px), 
+    linear-gradient(90deg, rgba(212, 163, 115, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ARCANE ENGINE BACKGROUND GLOWS */
+.organic-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 1;
+  opacity: 0.3;
+  animation: pulse 8s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  top: -20%; left: -10%;
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, var(--copper-base) 0%, transparent 60%);
+}
+
+.blob-2 {
+  bottom: -30%; right: -10%;
+  width: 70vw; height: 70vw;
+  background: radial-gradient(circle, var(--aether-glow) 0%, transparent 60%);
+  animation-delay: -4s;
+  opacity: 0.15;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.2; }
+  100% { transform: scale(1.1); opacity: 0.35; }
+}
+
+@keyframes fadeInOS {
+  from { opacity: 0; transform: scale(0.98); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* DESKTOP ENVIRONMENT CONTAINER */
+.desktop-environment {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  animation: fadeInOS 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* TOP BAR (BRONZE PANEL) */
+.top-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38px;
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-surface) 100%);
+  border-bottom: 2px solid var(--copper-shadow);
+  box-shadow: 0 1px 0 var(--copper-bright), 0 4px 12px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--bronze-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 1000;
+}
+
+.top-bar-left, .top-bar-center, .top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-bar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-main);
+  text-shadow: 0 0 8px rgba(244, 235, 225, 0.3);
+}
+
+.tb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.tb-item:hover {
+  background: rgba(212, 163, 115, 0.1);
+  color: var(--copper-bright);
+}
+
+.tb-logo-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--copper-bright);
+  filter: drop-shadow(0 0 4px var(--copper-base));
+}
+
+.tray-icons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.tray-icons svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* DOCK (HEAVY METAL PLATFORM) */
+.dock {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-copper);
+  border-top: 1px solid var(--bronze-mid);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  gap: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  z-index: 1000;
+}
+
+.dock::before {
+  content: '';
+  position: absolute;
+  top: -4px; left: 10%; right: 10%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--copper-bright), transparent);
+  opacity: 0.5;
+}
+
+.dock-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-base) 100%);
+  border: 1px solid var(--bronze-dark);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  box-shadow: inset 0 1px 0 rgba(212, 163, 115, 0.2), 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.dock-icon:hover {
+  transform: translateY(-8px);
+  border-color: var(--copper-base);
+  box-shadow: 0 8px 20px rgba(200, 90, 23, 0.3), inset 0 1px 0 rgba(255, 136, 77, 0.5);
+}
+
+.dock-icon.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  width: 24px;
+  height: 2px;
+  background: var(--aether-glow);
+  box-shadow: 0 0 8px var(--aether-glow);
+  border-radius: 2px;
+}
+
+.dock-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--bronze-light);
+  transition: color 0.3s;
+}
+
+.dock-icon:hover svg, .dock-icon.active svg {
+  color: var(--copper-bright);
+}
+
+/* APPLICATION WINDOW */
+.window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 860px;
+  height: 560px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-window);
+  box-shadow: var(--shadow-window);
+  border: 1px solid var(--bronze-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Outer frame effect */
+.window::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--border-light);
+  border-radius: calc(var(--radius-window) - 4px);
+  pointer-events: none;
+  z-index: 200;
+}
+
+/* WINDOW HEADER / TITLEBAR */
+.window-header {
+  height: 50px;
+  background: linear-gradient(180deg, #332B25 0%, var(--bg-surface) 100%);
+  border-bottom: 1px solid var(--bronze-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  cursor: grab;
+  position: relative;
+  z-index: 10;
+}
+
+.window-header:active {
+  cursor: grabbing;
+}
+
+/* Rivets */
+.window-header::before, .window-header::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--bronze-light), var(--bronze-dark));
+  box-shadow: 0 1px 1px rgba(255,255,255,0.1), inset 0 1px 2px rgba(0,0,0,0.8);
+}
+.window-header::before { left: 100px; }
+.window-header::after { right: 100px; }
+
+.window-controls {
+  display: flex;
+  gap: 10px;
+  width: 80px; 
+}
+
+.win-btn {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.8);
+  background: var(--bg-base);
+  transition: all 0.2s;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+}
+
+/* Gemstone Controls */
+.win-btn.close { background: radial-gradient(circle at 30% 30%, #FF5252, #8A0000); }
+.win-btn.min { background: radial-gradient(circle at 30% 30%, #FFD740, #B28900); }
+.win-btn.max { background: radial-gradient(circle at 30% 30%, var(--aether-glow), #1D6353); }
+
+.win-btn:hover {
+  filter: brightness(1.3);
+  box-shadow: 0 0 8px currentColor;
+}
+.win-btn.close:hover { color: #FF5252; }
+.win-btn.min:hover { color: #FFD740; }
+.win-btn.max:hover { color: var(--aether-glow); }
+
+.window-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--copper-bright);
+  flex-grow: 1;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.window-actions {
+  width: 80px; 
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* WINDOW BODY */
+.window-body {
+  display: flex;
+  flex-grow: 1;
+  background: var(--bg-surface);
+  height: calc(100% - 50px);
+  position: relative;
+}
+
+/* THE COPPER PIPE DIVIDER */
+.pipe-divider {
+  position: absolute;
+  left: 240px; /* Width of sidebar */
+  top: 0; bottom: 0;
+  width: 12px;
+  background: linear-gradient(90deg, #3A1C0D 0%, #C85A17 30%, #FFB088 50%, #C85A17 70%, #3A1C0D 100%);
+  border-left: 1px solid rgba(0,0,0,0.6);
+  border-right: 1px solid rgba(0,0,0,0.6);
+  box-shadow: 3px 0 10px rgba(0,0,0,0.5), -2px 0 8px rgba(0,0,0,0.3);
+  z-index: 50;
+}
+
+/* Pipe Joints */
+.pipe-divider::before, .pipe-divider::after {
+  content: '';
+  position: absolute;
+  left: -2px; right: -2px;
+  height: 16px;
+  background: linear-gradient(90deg, #2A1A10 0%, #A07148 20%, #E6C29F 50%, #A07148 80%, #2A1A10 100%);
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 2px solid rgba(0,0,0,0.8);
+  border-radius: 2px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+.pipe-divider::before { top: 60px; }
+.pipe-divider::after { bottom: 60px; }
+
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: var(--bg-base);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius-ui);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.nav-item svg {
+  width: 18px; height: 18px;
+  opacity: 0.7;
+}
+
+.nav-item:hover {
+  background: rgba(200, 90, 23, 0.05);
+  color: var(--bronze-light);
+  border-color: rgba(200, 90, 23, 0.2);
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, var(--aether-dim) 0%, transparent 100%);
+  color: var(--aether-glow);
+  border-left: 3px solid var(--aether-glow);
+  border-radius: 0 var(--radius-ui) var(--radius-ui) 0;
+}
+
+.nav-item.active svg {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px var(--aether-glow));
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+  flex-grow: 1;
+  padding: 48px 64px 48px 80px; /* Extra left padding for the pipe */
+  overflow-y: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.about-header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.os-logo-large {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-base) 100%);
+  border: 2px solid var(--copper-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--copper-bright);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.05);
+  position: relative;
+}
+
+.os-logo-large::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--copper-bright);
+  border-radius: 22px;
+  opacity: 0.2;
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.os-logo-large svg {
+  width: 44px; height: 44px;
+  filter: drop-shadow(0 0 8px var(--copper-bright));
+}
+
+.os-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.2rem;
+  font-weight: 500;
+  color: var(--copper-bright);
+  line-height: 1;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  letter-spacing: 0.02em;
+}
+
+.os-subtitle {
+  font-size: 0.9rem;
+  color: var(--bronze-light);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* SETTINGS CARDS */
+.settings-group {
+  margin-bottom: 40px;
+}
+
+.group-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--aether-glow);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bronze-dark);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.group-title::before {
+  content: '';
+  display: block;
+  width: 8px; height: 8px;
+  background: var(--aether-glow);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px var(--aether-glow);
+}
+
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--bronze-dark);
+  border-radius: var(--radius-ui);
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.4);
+  background: linear-gradient(90deg, transparent, rgba(212, 163, 115, 0.02));
+}
+
+.card-row:last-child {
+  border-bottom: none;
+}
+
+.row-label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.row-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--bronze-light);
+  font-style: italic;
+}
+
+/* TOGGLE SWITCH (Mechanical Rune) */
+.toggle {
+  width: 48px;
+  height: 24px;
+  background: var(--bg-base);
+  border: 1px solid var(--bronze-dark);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.toggle.on {
+  background: rgba(69, 182, 156, 0.15); /* Aether dim */
+  border-color: var(--aether-glow);
+  box-shadow: inset 0 0 8px var(--aether-glow);
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 18px; height: 18px;
+  background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-mid) 100%);
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.4);
+}
+
+.toggle.on::after {
+  transform: translateX(24px);
+  background: radial-gradient(circle, #FFF 0%, var(--aether-glow) 60%);
+  box-shadow: 0 0 10px var(--aether-glow);
+}
+
+/* Custom Scrollbar for Main Content */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--bronze-dark);
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--bronze-mid);
+}
+
+</style>
+</head>
+<body>
+
+<div class="organic-blob blob-1"></div>
+<div class="organic-blob blob-2"></div>
+
+<div class="desktop-environment">
+  
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="tb-item">
+        <svg class="tb-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Mechanisms</span>
+      </div>
+    </div>
+    
+    <div class="top-bar-center">
+      <div class="tb-item" id="clock">Cycle 14.8 • Alignment Sync</div>
+    </div>
+    
+    <div class="top-bar-right">
+      <div class="tb-item tray-icons">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION WINDOW -->
+  <div class="window" id="app-window">
+    <div class="window-header" id="window-drag-handle">
+      <div class="window-controls">
+        <button class="win-btn close"></button>
+        <button class="win-btn min"></button>
+        <button class="win-btn max"></button>
+      </div>
+      <div class="window-title">Arcane System Properties</div>
+      <div class="window-actions"></div>
+    </div>
+    
+    <div class="window-body">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="nav-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Core Architecture
+        </div>
+        <div class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          Aesthetic Matrices
+        </div>
+        <div class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Clockwork Relays
+        </div>
+        <div class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Operatives
+        </div>
+      </div>
+      
+      <!-- COPPER PIPE DIVIDER -->
+      <div class="pipe-divider"></div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <div class="about-header">
+          <div class="os-logo-large">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <h1 class="os-title">Aetherworks OS</h1>
+            <div class="os-subtitle">Brass & Cog Forged Edition</div>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <div class="group-title">Hardware Profile</div>
+          <div class="card">
+            <div class="card-row">
+              <span class="row-label">Processing Engine</span>
+              <span class="row-value">Babbage M-Series Clockwork Arch.</span>
+            </div>
+            <div class="card-row">
+              <span class="row-label">Aetheric Memory</span>
+              <span class="row-value">32.0 GB Crystalline</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="group-title">Software Foundation</div>
+          <div class="card">
+            <div class="card-row">
+              <span class="row-label">OS Name</span>
+              <span class="row-value">Ubuntu 24.04 (Arcanepunk Fork)</span>
+            </div>
+            <div class="card-row">
+              <span class="row-label">Kernel Version</span>
+              <span class="row-value">Linux 6.8.0-aetherworks</span>
+            </div>
+            <div class="card-row">
+              <span class="row-label">Environment</span>
+              <span class="row-value">GNOME 46 (Steam & Brass Shell)</span>
+            </div>
+            <div class="card-row">
+              <span class="row-label">Windowing System</span>
+              <span class="row-value">Wayland Protocol</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <div class="group-title">Mechanics & Relays</div>
+          <div class="card">
+            <div class="card-row">
+              <span class="row-label">Enforce GTK4 Copper Plating</span>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="card-row">
+              <span class="row-label">Aether Engine Background Resonance</span>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCK -->
+  <div class="dock">
+    <div class="dock-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
+    </div>
+    <div class="dock-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </div>
+    <div class="dock-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+    </div>
+    <div class="dock-icon active">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Script to make the application window draggable
+  const dragHandle = document.getElementById('window-drag-handle');
+  const appWindow = document.getElementById('app-window');
+  
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  dragHandle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    
+    // Get the current translation values
+    const style = window.getComputedStyle(appWindow);
+    const transform = new DOMMatrixReadOnly(style.transform);
+    
+    // Calculate difference between mouse position and element position
+    offsetX = e.clientX - transform.m41;
+    offsetY = e.clientY - transform.m42;
+    
+    appWindow.style.transition = 'none'; // Disable transition for smooth dragging
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - offsetX;
+    const newY = e.clientY - offsetY;
+    
+    // Keep the "transform: translate(-50%, -50%)" math consistent by moving it directly
+    appWindow.style.transform = `translate(${newX}px, ${newY}px)`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    appWindow.style.transition = 'transform 0.1s ease-out';
+  });
+  
+  // Script to close/minimize simulation
+  const closeBtn = document.querySelector('.win-btn.close');
+  closeBtn.addEventListener('click', () => {
+      appWindow.style.opacity = '0';
+      appWindow.style.transform = 'translate(-50%, -40%) scale(0.95)';
+      appWindow.style.pointerEvents = 'none';
+      appWindow.style.transition = 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)';
+      document.querySelector('.dock-icon.active').classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
