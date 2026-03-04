@@ -1,0 +1,1243 @@
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghostwrite — We Grow Apps Into Ecosystems</title>
+<meta name="description" content="App farmers. We plant your app and our living systems process grows it into a full ecosystem across every Apple platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Luxury Palette */
+  --bg-base: #FAFAF8; /* Soft cream/white */
+  --bg-surface: #FFFFFF;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  
+  --green-900: #0A1C14; /* Deepest forest */
+  --green-800: #122E21;
+  --green-700: #1B402E;
+  --green-200: #D1E0D7;
+  --green-100: #E8F0EA;
+  
+  --gold-primary: #C5A059;
+  --gold-light: #E6D0A1;
+  --gold-dark: #9A7A3A;
+  
+  --text-main: #122E21;
+  --text-muted: #5C7065;
+  --text-light: #8A9C91;
+
+  --border-light: #E5EBE7;
+  --border-gold: rgba(197, 160, 89, 0.3);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* SUBTLE PAPER NOISE */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* LIVING SYSTEM BACKGROUND BLOBS */
+.organic-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.4;
+  animation: breathe 15s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  top: -10%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--green-200) 0%, transparent 70%);
+}
+
+.blob-2 {
+  top: 40%; right: -20%;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+  animation-delay: -5s;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.1) translate(30px, -30px); }
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.1);
+  color: var(--gold-primary);
+}
+
+.logo-icon svg { width: 22px; height: 22px; }
+
+.logo-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--green-900);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.logo-sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 2px;
+}
+
+.nav-status {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.status-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.status-active {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+}
+
+.status-secure {
+  background: var(--green-100);
+  color: var(--green-800);
+  border: 1px solid var(--green-200);
+}
+
+/* TYPOGRAPHY UTILS */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--green-900);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  z-index: 10;
+}
+
+.hero .eyebrow {
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.2s;
+}
+
+.hero h1 {
+  font-weight: 500;
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.4s;
+}
+
+.hero h1 span {
+  font-style: italic;
+  color: var(--gold-dark);
+}
+
+.hero-sub {
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 550px;
+  line-height: 1.7;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.6s;
+}
+
+.hero-sub em {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--green-800);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.8s;
+}
+
+.btn-primary {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 16px 36px;
+  background: var(--green-900);
+  color: var(--bg-surface);
+  border: 1px solid var(--green-900);
+  border-radius: 40px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 8px 24px rgba(10, 28, 20, 0.15);
+}
+
+.btn-primary:hover {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  box-shadow: 0 12px 32px rgba(154, 122, 58, 0.25);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--green-900);
+  border: 1px solid var(--border-gold);
+  border-radius: 40px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.4s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold-primary);
+  background: rgba(197, 160, 89, 0.05);
+}
+
+/* SCROLL INDICATOR */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1.2s;
+}
+
+.scroll-indicator span {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--gold-primary), transparent);
+  animation: growDown 2s ease-in-out infinite;
+  transform-origin: top;
+}
+
+@keyframes growDown {
+  0% { transform: scaleY(0); opacity: 0; }
+  50% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* PROOF BAR */
+.proof-bar {
+  padding: 4rem 2rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+  z-index: 10;
+}
+
+.proof-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.proof-item {
+  text-align: center;
+}
+
+.proof-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 3rem;
+  color: var(--gold-dark);
+  line-height: 1;
+}
+
+.proof-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 0.75rem;
+}
+
+/* PROCESS SECTION */
+.process {
+  padding: 10rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.section-sub {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 300;
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 5rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-gold);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 4.5rem;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: -2.8rem;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+}
+
+.timeline-item:nth-child(2) .timeline-dot { border-color: var(--green-700); box-shadow: 0 0 0 4px rgba(27, 64, 46, 0.1); }
+.timeline-item:nth-child(3) .timeline-dot { border-color: var(--gold-dark); background: var(--gold-dark); }
+
+.timeline-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 2rem;
+  color: var(--green-900);
+  margin-bottom: 1rem;
+}
+
+.timeline-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 550px;
+}
+
+/* PRICING */
+.pricing {
+  padding: 8rem 2rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+  z-index: 10;
+}
+
+.pricing-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pricing-grid {
+  display: grid;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.pricing-grid.two-col {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 2rem;
+}
+
+/* ECOSYSTEM HERO CARD */
+.ecosystem-hero {
+  margin-top: 4rem;
+}
+
+.price-card {
+  background: var(--bg-base);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+}
+
+.price-card.featured {
+  background: var(--green-900);
+  border: 1px solid var(--green-800);
+  color: var(--bg-surface);
+  box-shadow: 0 30px 60px rgba(10, 28, 20, 0.15);
+}
+
+.price-card.featured .price-amount,
+.price-card.featured .price-context,
+.price-card.featured .eco-pitch strong,
+.price-card.featured .price-features li {
+  color: var(--bg-surface);
+}
+
+.price-card.featured .eco-pitch {
+  color: var(--text-light);
+}
+
+.price-card.featured .eco-pitch em {
+  color: var(--gold-light);
+}
+
+.price-card.featured .price-features li::before {
+  border-color: var(--gold-primary);
+  background: var(--gold-primary);
+}
+
+.price-card.featured::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-light), var(--gold-dark));
+}
+
+.eco-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  background: rgba(197, 160, 89, 0.1);
+  color: var(--gold-light);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  padding: 6px 16px;
+  border-radius: 30px;
+  margin-bottom: 2rem;
+}
+
+.eco-flex {
+  display: flex;
+  gap: 4rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.eco-left { flex: 1.2; }
+.eco-right { flex: 1; }
+
+.eco-pitch {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-top: 1.5rem;
+}
+
+/* FOUR HOUR SHIP */
+.four-hour {
+  margin-top: 2rem;
+}
+
+.four-hour-inner {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: 3.5rem;
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 60px rgba(197, 160, 89, 0.05);
+}
+
+.four-hour-left { flex: 1.2; }
+.four-hour-right { flex: 1; }
+
+.four-hour-flash {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--green-100);
+  border-radius: 50%;
+  color: var(--gold-dark);
+  margin-bottom: 1.5rem;
+}
+
+.four-hour-flash svg { width: 24px; height: 24px; stroke-width: 1.5; }
+
+.four-hour-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 2.5rem;
+  color: var(--green-900);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.four-hour-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.four-hour-desc em {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold-dark);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.four-hour-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 4rem;
+  color: var(--green-900);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.four-hour-price .dollar {
+  font-size: 2rem;
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--gold-dark);
+}
+
+.price-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 3.5rem;
+  color: var(--green-900);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.price-amount .dollar {
+  font-size: 1.8rem;
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--gold-dark);
+}
+
+.price-tier {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5rem;
+}
+
+.price-context {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.price-features {
+  list-style: none;
+  margin-bottom: 3rem;
+}
+
+.price-features li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.price-card.featured .price-features li {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.price-features li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: transparent;
+  border: 1px solid var(--green-700);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.price-btn {
+  display: block;
+  width: 100%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 16px;
+  text-align: center;
+  border-radius: 40px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.4s ease;
+  text-decoration: none;
+}
+
+.price-btn-primary {
+  background: var(--gold-dark);
+  color: var(--bg-surface);
+  border: 1px solid var(--gold-dark);
+}
+
+.price-btn-primary:hover {
+  background: var(--bg-surface);
+  color: var(--gold-dark);
+}
+
+.price-btn-ghost {
+  background: transparent;
+  color: var(--green-900);
+  border: 1px solid var(--border-gold);
+}
+
+.price-btn-ghost:hover {
+  border-color: var(--green-800);
+  background: var(--bg-surface);
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 4rem 0 1rem;
+}
+
+.or-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+.or-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* WHAT YOU GET */
+.deliverables {
+  padding: 10rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.del-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 5rem;
+}
+
+.del-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 2.5rem;
+  transition: all 0.4s ease;
+}
+
+.del-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.03);
+}
+
+.del-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--green-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--green-800);
+}
+
+.del-icon svg {
+  width: 24px; height: 24px;
+  stroke-width: 1.5;
+}
+
+.del-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--green-900);
+  margin-bottom: 0.75rem;
+}
+
+.del-desc {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* BUILT WITH */
+.built-with {
+  padding: 8rem 2rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.built-with-inner {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.built-with p {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-top: 2.5rem;
+}
+
+.built-with .highlight {
+  color: var(--green-800);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-gold);
+}
+
+/* CTA SECTION */
+.final-cta {
+  padding: 12rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  background: var(--bg-base);
+}
+
+.final-cta h2 {
+  font-weight: 500;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.final-cta p {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 300;
+  margin-bottom: 3.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* FOOTER */
+footer {
+  padding: 4rem 2rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.footer-text a {
+  color: var(--gold-dark);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.footer-text a:hover {
+  border-color: var(--gold-dark);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .eco-flex { flex-direction: column; gap: 2.5rem; }
+  .four-hour-inner { flex-direction: column; gap: 2.5rem; padding: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  header { padding: 1rem 1.5rem; }
+  .nav-status { display: none; }
+  .hero { padding: 8rem 1.5rem 4rem; }
+  .proof-inner { gap: 2rem; flex-direction: column; align-items: center; }
+  .proof-number { font-size: 2.5rem; }
+  .process, .deliverables, .pricing { padding: 6rem 1.5rem; }
+  .pricing-grid.two-col { grid-template-columns: 1fr; }
+  .final-cta { padding: 8rem 1.5rem; }
+  .timeline { padding-left: 2rem; }
+  .timeline-dot { left: -2.4rem; }
+  .price-card { padding: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="organic-blob blob-1"></div>
+<div class="organic-blob blob-2"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <!-- Minimalist Sprout/Seed Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9"/><path d="M12 13C8 13 4 9 4 5c4 0 8 4 8 8z"/><path d="M12 13c4 0 8-4 8-8-4 0-8 4-8 8z"/></svg>
+    </div>
+    <div class="logo-text-wrapper">
+      <div class="logo-text">Ghostwrite</div>
+      <div class="logo-sub">Luminous Prosperity</div>
+    </div>
+  </a>
+  <div class="nav-status">
+    <span class="status-badge status-active">Accepting Projects</span>
+    <span class="status-badge status-secure">Bespoke Cultivation</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="eyebrow">App Farmers // Living Software</span>
+  <h1>
+    We grow apps<br>
+    <span>into ecosystems.</span>
+  </h1>
+  <p class="hero-sub">We plant your app like a seed. Our living systems process lets it grow — organically, over time — into a full ecosystem across every Apple platform. Your app doesn't just launch. <em>It evolves.</em></p>
+  <div class="hero-cta">
+    <a href="#pricing" class="btn-primary">View Investment</a>
+    <a href="#process" class="btn-ghost">The Process</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Discover</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<section class="proof-bar">
+  <div class="proof-inner">
+    <div class="proof-item">
+      <div class="proof-number">96+</div>
+      <div class="proof-label">Apps Cultivated</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">3</div>
+      <div class="proof-label">Day Turnaround</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">100%</div>
+      <div class="proof-label">Equity Retained</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">Elite</div>
+      <div class="proof-label">AI Architecture</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process fade-in" id="process">
+  <span class="eyebrow">The Growing Season</span>
+  <h2 class="section-title">Plant. Tend. Harvest.<br>Repeat forever.</h2>
+  <p class="section-sub">Our living systems process means your app isn't static. It's organic. It grows new capabilities the way a garden grows new fruit, naturally adapting to its environment.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Phase I // The Seed</div>
+      <div class="timeline-title">We Plant Your Vision</div>
+      <div class="timeline-desc">One conversation. We extract the pure DNA of your idea — its purpose, its audience, its life force. This becomes the seed from which your entire ecosystem will organically sprout.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Phase II // The Growth</div>
+      <div class="timeline-title">The App Takes Root</div>
+      <div class="timeline-desc">Our specialized AI-augmented crew cultivates your software across all platforms — iPhone, iPad, Mac, Vision OS. It isn't ported; it's grown natively for each environment, thriving in its unique soil.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Ongoing // The Harvest</div>
+      <div class="timeline-title">Your Ecosystem Evolves</div>
+      <div class="timeline-desc">New features emerge naturally. Your single app matures into a connected, intelligent suite. The roots spread, the canopy expands, and the system grows without needing to be rebuilt.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <span class="eyebrow">The Investment</span>
+    <h2 class="section-title">Transparent & Absolute.</h2>
+    <p class="section-sub">Select your tier. Plant the seed. Own your digital terrain entirely.</p>
+
+    <!-- THE HEADLINE TIER -->
+    <div class="ecosystem-hero">
+      <div class="price-card featured ecosystem-card fade-in">
+        <div class="eco-badge">The Full Garden + Your Own OS</div>
+        <div class="price-tier">The Ecosystem + Branded Unix Distro</div>
+        <div class="eco-flex">
+          <div class="eco-left">
+            <div class="price-amount"><span class="dollar">$</span>120K</div>
+            <div class="price-context">Your apps. Your ecosystem. Your branded operating system.</div>
+            <p class="eco-pitch">Everything in the ecosystem — plus a <em>custom branded Unix-based operating system</em>. Your logo on boot. Your apps pre-installed. Your email, calendar, docs, files, and AI — all growing natively inside <strong>your own OS</strong>. Every platform. Every screen. One living system.</p>
+            <a href="#contact" class="price-btn price-btn-primary" style="display:inline-block; margin-top: 2rem; width: auto; padding: 16px 40px;">Grow My Universe</a>
+          </div>
+          <div class="eco-right">
+            <ul class="price-features">
+              <li>Everything in The Ecosystem</li>
+              <li>Custom branded Unix/Linux distribution</li>
+              <li>Your exclusive OS boot sequence</li>
+              <li>All applications pre-installed natively</li>
+              <li>iPhone, iPad, Mac, Watch, Vision OS</li>
+              <li>Email, calendar, docs, files unified</li>
+              <li>System-wide AI command layer</li>
+              <li>Enterprise team deployment controls</li>
+              <li>Continuous organic evolution</li>
+              <li>6 months of dedicated cultivation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE FOUR HOUR SHIP -->
+    <div class="four-hour fade-in">
+      <div class="four-hour-inner">
+        <div class="four-hour-left">
+          <div class="four-hour-flash">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="price-tier">The Express Harvest</div>
+          <div class="four-hour-headline">Your vision.<br>Four hours.<br>Realized.</div>
+          <p class="four-hour-desc">Provide your specifications. We step into the greenhouse for four hours. You return to a fully functional, production-ready application. <em>Not a concept. A shipped reality.</em></p>
+        </div>
+        <div class="four-hour-right">
+          <div class="four-hour-price"><span class="dollar">$</span>55K</div>
+          <div class="price-context">Bespoke creation, delivered same-day.</div>
+          <ul class="price-features">
+            <li>Precision app built to exact specs</li>
+            <li>Custom luxury UI/UX design</li>
+            <li>Live deployment within 4 hours</li>
+            <li>Intelligent AI integrations</li>
+            <li>100% intellectual property ownership</li>
+          </ul>
+          <a href="#contact" class="price-btn price-btn-ghost">Commission Immediate Build</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="or-divider fade-in">
+      <div class="or-line"></div>
+      <span class="or-text">Or plant a single seed</span>
+      <div class="or-line"></div>
+    </div>
+
+    <!-- ENTRY TIERS -->
+    <div class="pricing-grid two-col fade-in">
+      <!-- THE ECOSYSTEM (SOLO) -->
+      <div class="price-card">
+        <div class="price-tier">The Ecosystem // Full Garden</div>
+        <div class="price-amount"><span class="dollar">$</span>45K</div>
+        <div class="price-context">Your application blooming into a multi-platform living ecosystem.</div>
+        <ul class="price-features">
+          <li>Everything in The Seed, fully expanded</li>
+          <li>Native across iPhone, iPad, Mac, Vision OS</li>
+          <li>Integrated productivity suite</li>
+          <li>Deep AI features woven throughout</li>
+          <li>Living systems architecture for future growth</li>
+          <li>Full source code & IP ownership</li>
+          <li>90 days of expert post-launch tending</li>
+        </ul>
+        <a href="#contact" class="price-btn price-btn-primary">Cultivate Ecosystem</a>
+      </div>
+
+      <!-- THE SEED -->
+      <div class="price-card">
+        <div class="price-tier">The Seed // 1 App</div>
+        <div class="price-amount"><span class="dollar">$</span>10K</div>
+        <div class="price-context">One pure application. Five core features. Planted in three days.</div>
+        <ul class="price-features">
+          <li>Deep discovery & DNA extraction</li>
+          <li>5 core features, masterfully crafted</li>
+          <li>Bespoke UI rooted in your brand identity</li>
+          <li>App Store or seamless web deployment</li>
+          <li>Full source code & IP ownership</li>
+          <li>30 days of meticulous post-launch care</li>
+          <li>Architected to eventually become an ecosystem</li>
+        </ul>
+        <a href="#contact" class="price-btn price-btn-ghost">Plant The Seed</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="deliverables fade-in">
+  <span class="eyebrow">The Harvest</span>
+  <h2 class="section-title">Beyond application.<br>A foundation.</h2>
+
+  <div class="del-grid">
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <div class="del-title">Absolute Ownership</div>
+      <div class="del-desc">The intellectual property is unconditionally yours. No restrictive lock-ins, no perpetual platform fees. Complete sovereignty over your codebase.</div>
+    </div>
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="del-title">Omnipresent Architecture</div>
+      <div class="del-desc">Web, iOS, MacOS. We cultivate experiences where your audience resides, ensuring a seamless, high-fidelity presence across all environments.</div>
+    </div>
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      </div>
+      <div class="del-title">Inherent Intelligence</div>
+      <div class="del-desc">AI isn't an afterthought; it's the soil. Conversational interfaces, predictive automation, and generative tools are woven into the very fabric of the app.</div>
+    </div>
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+      </div>
+      <div class="del-title">Bespoke Identity</div>
+      <div class="del-desc">A visual language crafted specifically for your brand's essence. No generic templates, only custom aesthetics that exude quality and prestige.</div>
+    </div>
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="del-title">Accelerated Cultivation</div>
+      <div class="del-desc">Time is the ultimate luxury. We transition from ideation to live deployment in just 72 hours. Velocity without compromising excellence.</div>
+    </div>
+    <div class="del-card">
+      <div class="del-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="del-title">Dedicated Stewardship</div>
+      <div class="del-desc">Our partnership extends beyond launch. We provide ongoing care, refinement, and strategic guidance to ensure your ecosystem thrives.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILT WITH -->
+<section class="built-with fade-in">
+  <div class="built-with-inner">
+    <span class="eyebrow">The Farmers</span>
+    <h2 class="section-title">Guided by humans.<br>Grown by intelligence.</h2>
+    <p>Behind every thriving garden is a <span class="highlight">specialized AI cultivation team</span> — architecture, UX design, and engineering acting in harmony like roots, stem, and canopy. Orchestrated by a founder with <span class="highlight">96+ successful harvests</span> and two decades of living systems methodology. Your software is never merely assembled — it is thoughtfully planted, meticulously tended, and elevated into a living entity.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="contact">
+  <span class="eyebrow">Commence Growth</span>
+  <h2>Let's plant your vision.</h2>
+  <p>A single conversation. A single seed. A boundless ecosystem tailored entirely to you.</p>
+  <a href="mailto:hello@luminousprosperity.com" class="btn-primary" style="display:inline-block; margin-top: 1rem;">Initiate Contact</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-text">Ghostwrite // A <a href="https://luminousprosperity.com">Luminous Prosperity</a> Initiative &mdash; Providence, RI</p>
+</footer>
+
+<script>
+// Intersection Observer for graceful fade-ins
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Smooth scroll for elegant anchor navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      const headerOffset = 80;
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
