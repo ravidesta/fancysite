@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Manrope:wght@300;400;500;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 320px;
+  font-family: 'Manrope', sans-serif;
+  background: #FAFAF8;
+  color: #122E21;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Paper noise */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.popup-header {
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: #FFFFFF;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.1);
+  color: #C5A059;
+  flex-shrink: 0;
+}
+
+.logo-icon svg { width: 20px; height: 20px; }
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: #0A1C14;
+  line-height: 1.1;
+}
+
+.logo-sub {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #9A7A3A;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 2px;
+}
+
+.popup-body {
+  padding: 24px;
+}
+
+.eyebrow {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #9A7A3A;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+/* Master toggle */
+.master-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid #E5EBE7;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.master-toggle.active {
+  border-color: rgba(197, 160, 89, 0.4);
+  box-shadow: 0 4px 16px rgba(197, 160, 89, 0.08);
+}
+
+.toggle-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #0A1C14;
+  margin-bottom: 2px;
+}
+
+.toggle-info p {
+  font-size: 0.7rem;
+  color: #8A9C91;
+  font-weight: 400;
+}
+
+/* Toggle switch */
+.switch {
+  width: 44px;
+  height: 24px;
+  background: #E5EBE7;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+  border: none;
+  outline: none;
+}
+
+.switch.on {
+  background: #1B402E;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.switch.on::after {
+  transform: translateX(20px);
+  box-shadow: 0 2px 8px rgba(27, 64, 46, 0.3);
+}
+
+/* Site-specific section */
+.site-section {
+  margin-top: 8px;
+}
+
+.site-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #FFFFFF;
+  border: 1px solid #E5EBE7;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.site-card.active {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.site-card .site-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-card .site-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.site-icon.notion { background: #F7F6F3; border: 1px solid #E5EBE7; }
+.site-icon.github { background: #F6F8FA; border: 1px solid #E5EBE7; }
+
+.site-icon svg { width: 16px; height: 16px; }
+
+.site-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #122E21;
+}
+
+.site-detail {
+  font-size: 0.6rem;
+  color: #8A9C91;
+  margin-top: 1px;
+}
+
+.switch-sm {
+  width: 36px;
+  height: 20px;
+  background: #E5EBE7;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+  border: none;
+  outline: none;
+}
+
+.switch-sm.on {
+  background: #9A7A3A;
+}
+
+.switch-sm::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.switch-sm.on::after {
+  transform: translateX(16px);
+}
+
+/* Footer */
+.popup-footer {
+  padding: 16px 24px 20px;
+  text-align: center;
+  border-top: 1px solid #E5EBE7;
+}
+
+.popup-footer p {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #8A9C91;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.popup-footer a {
+  color: #9A7A3A;
+  text-decoration: none;
+}
+
+/* Status dot */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #E5EBE7;
+  display: inline-block;
+  margin-right: 6px;
+  transition: background 0.3s;
+}
+
+.status-dot.active {
+  background: #1B402E;
+  box-shadow: 0 0 6px rgba(27, 64, 46, 0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="popup-header">
+  <div class="logo-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9"/><path d="M12 13C8 13 4 9 4 5c4 0 8 4 8 8z"/><path d="M12 13c4 0 8-4 8-8-4 0-8 4-8 8z"/></svg>
+  </div>
+  <div>
+    <div class="logo-text">Ghostwrite</div>
+    <div class="logo-sub">Design System</div>
+  </div>
+</div>
+
+<div class="popup-body">
+  <div class="eyebrow"><span class="status-dot" id="statusDot"></span> System Control</div>
+
+  <div class="master-toggle" id="masterToggle">
+    <div class="toggle-info">
+      <h3>Apply Design</h3>
+      <p id="masterStatus">Dormant</p>
+    </div>
+    <button class="switch" id="masterSwitch" aria-label="Toggle design system"></button>
+  </div>
+
+  <div class="site-section">
+    <div class="eyebrow" style="margin-top: 20px;">Site-Specific Cultivation</div>
+
+    <div class="site-card" id="notionCard">
+      <div class="site-info">
+        <div class="site-icon notion">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4.5A2.5 2.5 0 016.5 2H18l2 2v15.5a2.5 2.5 0 01-2.5 2.5H6.5A2.5 2.5 0 014 19.5V4.5z" stroke="#191919" stroke-width="1.5"/><path d="M8 8h8M8 12h5" stroke="#191919" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="site-name">Notion</div>
+          <div class="site-detail">Enhanced workspace styling</div>
+        </div>
+      </div>
+      <button class="switch-sm" id="notionSwitch" aria-label="Toggle Notion styling"></button>
+    </div>
+
+    <div class="site-card" id="githubCard">
+      <div class="site-info">
+        <div class="site-icon github">
+          <svg viewBox="0 0 24 24" fill="#24292e" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        </div>
+        <div>
+          <div class="site-name">GitHub</div>
+          <div class="site-detail">Repository & PR refinement</div>
+        </div>
+      </div>
+      <button class="switch-sm" id="githubSwitch" aria-label="Toggle GitHub styling"></button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-footer">
+  <p>Ghostwrite // <a href="#">Luminous Prosperity</a></p>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

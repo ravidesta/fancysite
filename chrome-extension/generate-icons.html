@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head><title>Icon Generator</title></head>
+<body>
+<p>Open this file in a browser, right-click each canvas, and "Save image as" to create the icon PNGs.</p>
+<p>Or use the download links below each icon.</p>
+<div style="display: flex; gap: 24px; padding: 24px; align-items: end;">
+  <div>
+    <canvas id="c16" width="16" height="16"></canvas>
+    <br><a id="d16" download="icon16.png">Download 16px</a>
+  </div>
+  <div>
+    <canvas id="c48" width="48" height="48"></canvas>
+    <br><a id="d48" download="icon48.png">Download 48px</a>
+  </div>
+  <div>
+    <canvas id="c128" width="128" height="128"></canvas>
+    <br><a id="d128" download="icon128.png">Download 128px</a>
+  </div>
+</div>
+<script>
+function drawIcon(canvas, size) {
+  const ctx = canvas.getContext('2d');
+  const s = size;
+
+  // Background circle
+  ctx.beginPath();
+  ctx.arc(s/2, s/2, s/2, 0, Math.PI * 2);
+  ctx.fillStyle = '#0A1C14';
+  ctx.fill();
+
+  // Inner gold ring
+  ctx.beginPath();
+  ctx.arc(s/2, s/2, s * 0.38, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(197, 160, 89, 0.5)';
+  ctx.lineWidth = Math.max(1, s * 0.02);
+  ctx.stroke();
+
+  // Sprout icon (simplified)
+  ctx.strokeStyle = '#C5A059';
+  ctx.lineWidth = Math.max(1, s * 0.06);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Stem
+  ctx.beginPath();
+  ctx.moveTo(s/2, s * 0.72);
+  ctx.lineTo(s/2, s * 0.42);
+  ctx.stroke();
+
+  // Left leaf
+  ctx.beginPath();
+  ctx.moveTo(s/2, s * 0.42);
+  ctx.quadraticCurveTo(s * 0.28, s * 0.28, s * 0.32, s * 0.22);
+  ctx.stroke();
+
+  // Right leaf
+  ctx.beginPath();
+  ctx.moveTo(s/2, s * 0.42);
+  ctx.quadraticCurveTo(s * 0.72, s * 0.28, s * 0.68, s * 0.22);
+  ctx.stroke();
+
+  return canvas.toDataURL('image/png');
+}
+
+[16, 48, 128].forEach(size => {
+  const canvas = document.getElementById('c' + size);
+  const dataUrl = drawIcon(canvas, size);
+  document.getElementById('d' + size).href = dataUrl;
+});
+</script>
+</body>
+</html>
