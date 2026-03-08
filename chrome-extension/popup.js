@@ -7,65 +7,96 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusDot = document.getElementById('statusDot');
   const notionCard = document.getElementById('notionCard');
   const githubCard = document.getElementById('githubCard');
+  const themeRow = document.getElementById('themeRow');
+  const fontRow = document.getElementById('fontRow');
+  const weightRow = document.getElementById('weightRow');
+  const textColorRow = document.getElementById('textColorRow');
 
-  // Load stored state
-  chrome.storage.sync.get(
-    { enabled: false, notionEnabled: true, githubEnabled: true },
-    (data) => {
-      updateUI(data.enabled, data.notionEnabled, data.githubEnabled);
-    }
-  );
+  const DEFAULTS = {
+    enabled: false,
+    notionEnabled: true,
+    githubEnabled: true,
+    theme: 'luxury',
+    font: 'classic',
+    weight: 'medium',
+    textColor: 'default'
+  };
 
-  function updateUI(enabled, notionEnabled, githubEnabled) {
-    masterSwitch.classList.toggle('on', enabled);
-    masterToggle.classList.toggle('active', enabled);
-    masterStatus.textContent = enabled ? 'Cultivating' : 'Dormant';
-    statusDot.classList.toggle('active', enabled);
+  chrome.storage.sync.get(DEFAULTS, (data) => {
+    updateUI(data);
+  });
 
-    notionSwitch.classList.toggle('on', notionEnabled);
-    notionCard.classList.toggle('active', notionEnabled);
+  function updateUI(data) {
+    masterSwitch.classList.toggle('on', data.enabled);
+    masterToggle.classList.toggle('active', data.enabled);
+    masterStatus.textContent = data.enabled ? 'Cultivating' : 'Dormant';
+    statusDot.classList.toggle('active', data.enabled);
 
-    githubSwitch.classList.toggle('on', githubEnabled);
-    githubCard.classList.toggle('active', githubEnabled);
+    notionSwitch.classList.toggle('on', data.notionEnabled);
+    notionCard.classList.toggle('active', data.notionEnabled);
+
+    githubSwitch.classList.toggle('on', data.githubEnabled);
+    githubCard.classList.toggle('active', data.githubEnabled);
+
+    themeRow.querySelectorAll('.option-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.theme === data.theme);
+    });
+
+    fontRow.querySelectorAll('.option-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.font === data.font);
+    });
+
+    weightRow.querySelectorAll('.opt-sm').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.weight === data.weight);
+    });
+
+    textColorRow.querySelectorAll('.opt-sm').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.textcolor === data.textColor);
+    });
   }
 
-  masterSwitch.addEventListener('click', () => {
-    chrome.storage.sync.get(
-      { enabled: false, notionEnabled: true, githubEnabled: true },
-      (data) => {
-        const newEnabled = !data.enabled;
-        chrome.storage.sync.set({ enabled: newEnabled }, () => {
-          updateUI(newEnabled, data.notionEnabled, data.githubEnabled);
-          notifyContentScript();
-        });
-      }
-    );
+  function toggle(key) {
+    chrome.storage.sync.get(DEFAULTS, (data) => {
+      data[key] = !data[key];
+      chrome.storage.sync.set({ [key]: data[key] }, () => {
+        updateUI(data);
+        notifyContentScript();
+      });
+    });
+  }
+
+  function setOption(key, value) {
+    chrome.storage.sync.get(DEFAULTS, (data) => {
+      data[key] = value;
+      chrome.storage.sync.set({ [key]: value }, () => {
+        updateUI(data);
+        notifyContentScript();
+      });
+    });
+  }
+
+  masterSwitch.addEventListener('click', () => toggle('enabled'));
+  notionSwitch.addEventListener('click', () => toggle('notionEnabled'));
+  githubSwitch.addEventListener('click', () => toggle('githubEnabled'));
+
+  themeRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-theme]');
+    if (btn) setOption('theme', btn.dataset.theme);
   });
 
-  notionSwitch.addEventListener('click', () => {
-    chrome.storage.sync.get(
-      { enabled: false, notionEnabled: true, githubEnabled: true },
-      (data) => {
-        const newVal = !data.notionEnabled;
-        chrome.storage.sync.set({ notionEnabled: newVal }, () => {
-          updateUI(data.enabled, newVal, data.githubEnabled);
-          notifyContentScript();
-        });
-      }
-    );
+  fontRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-font]');
+    if (btn) setOption('font', btn.dataset.font);
   });
 
-  githubSwitch.addEventListener('click', () => {
-    chrome.storage.sync.get(
-      { enabled: false, notionEnabled: true, githubEnabled: true },
-      (data) => {
-        const newVal = !data.githubEnabled;
-        chrome.storage.sync.set({ githubEnabled: newVal }, () => {
-          updateUI(data.enabled, data.notionEnabled, newVal);
-          notifyContentScript();
-        });
-      }
-    );
+  weightRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-weight]');
+    if (btn) setOption('weight', btn.dataset.weight);
+  });
+
+  textColorRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-textcolor]');
+    if (btn) setOption('textColor', btn.dataset.textcolor);
   });
 
   function notifyContentScript() {
