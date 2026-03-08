@@ -1,30 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const masterSwitch = document.getElementById('masterSwitch');
-  const notionSwitch = document.getElementById('notionSwitch');
-  const githubSwitch = document.getElementById('githubSwitch');
-  const masterToggle = document.getElementById('masterToggle');
-  const masterStatus = document.getElementById('masterStatus');
-  const statusDot = document.getElementById('statusDot');
-  const notionCard = document.getElementById('notionCard');
-  const githubCard = document.getElementById('githubCard');
-  const themeRow = document.getElementById('themeRow');
-  const fontRow = document.getElementById('fontRow');
-  const weightRow = document.getElementById('weightRow');
-  const textColorRow = document.getElementById('textColorRow');
-
   const DEFAULTS = {
     enabled: false,
     notionEnabled: true,
     githubEnabled: true,
     theme: 'luxury',
-    font: 'classic',
+    headingFont: 'garamond',
+    bodyFont: 'manrope',
+    headingItalic: false,
+    headingSize: 'normal',
     weight: 'medium',
     textColor: 'default'
   };
 
-  chrome.storage.sync.get(DEFAULTS, (data) => {
-    updateUI(data);
-  });
+  const $ = (id) => document.getElementById(id);
+
+  const masterSwitch = $('masterSwitch');
+  const masterToggle = $('masterToggle');
+  const masterStatus = $('masterStatus');
+  const statusDot = $('statusDot');
+  const notionSwitch = $('notionSwitch');
+  const githubSwitch = $('githubSwitch');
+  const notionCard = $('notionCard');
+  const githubCard = $('githubCard');
+  const italicToggle = $('italicToggle');
+
+  const themeRow = $('themeRow');
+  const headingFontRow = $('headingFontRow');
+  const bodyFontRow = $('bodyFontRow');
+  const sizeRow = $('sizeRow');
+  const weightRow = $('weightRow');
+  const textColorRow = $('textColorRow');
+
+  chrome.storage.sync.get(DEFAULTS, updateUI);
 
   function updateUI(data) {
     masterSwitch.classList.toggle('on', data.enabled);
@@ -34,76 +41,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
     notionSwitch.classList.toggle('on', data.notionEnabled);
     notionCard.classList.toggle('active', data.notionEnabled);
-
     githubSwitch.classList.toggle('on', data.githubEnabled);
     githubCard.classList.toggle('active', data.githubEnabled);
 
-    themeRow.querySelectorAll('.option-btn').forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.theme === data.theme);
-    });
+    selectInRow(themeRow, '[data-theme]', 'theme', data.theme);
+    selectInRow(headingFontRow, '[data-hfont]', 'hfont', data.headingFont);
+    selectInRow(bodyFontRow, '[data-bfont]', 'bfont', data.bodyFont);
+    selectInRow(sizeRow, '[data-size]', 'size', data.headingSize);
+    selectInRow(weightRow, '[data-weight]', 'weight', data.weight);
+    selectInRow(textColorRow, '[data-textcolor]', 'textcolor', data.textColor);
 
-    fontRow.querySelectorAll('.option-btn').forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.font === data.font);
-    });
+    italicToggle.classList.toggle('selected', data.headingItalic);
+  }
 
-    weightRow.querySelectorAll('.opt-sm').forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.weight === data.weight);
-    });
-
-    textColorRow.querySelectorAll('.opt-sm').forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.textcolor === data.textColor);
+  function selectInRow(container, selector, attr, value) {
+    container.querySelectorAll(selector).forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset[attr] === value);
     });
   }
 
   function toggle(key) {
     chrome.storage.sync.get(DEFAULTS, (data) => {
       data[key] = !data[key];
-      chrome.storage.sync.set({ [key]: data[key] }, () => {
-        updateUI(data);
-        notifyContentScript();
-      });
+      chrome.storage.sync.set({ [key]: data[key] }, () => { updateUI(data); notify(); });
     });
   }
 
-  function setOption(key, value) {
+  function setOpt(key, value) {
     chrome.storage.sync.get(DEFAULTS, (data) => {
       data[key] = value;
-      chrome.storage.sync.set({ [key]: value }, () => {
-        updateUI(data);
-        notifyContentScript();
-      });
+      chrome.storage.sync.set({ [key]: value }, () => { updateUI(data); notify(); });
     });
   }
 
   masterSwitch.addEventListener('click', () => toggle('enabled'));
   notionSwitch.addEventListener('click', () => toggle('notionEnabled'));
   githubSwitch.addEventListener('click', () => toggle('githubEnabled'));
+  italicToggle.addEventListener('click', () => toggle('headingItalic'));
 
   themeRow.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-theme]');
-    if (btn) setOption('theme', btn.dataset.theme);
+    const b = e.target.closest('[data-theme]');
+    if (b) setOpt('theme', b.dataset.theme);
   });
 
-  fontRow.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-font]');
-    if (btn) setOption('font', btn.dataset.font);
+  headingFontRow.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-hfont]');
+    if (b) setOpt('headingFont', b.dataset.hfont);
+  });
+
+  bodyFontRow.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-bfont]');
+    if (b) setOpt('bodyFont', b.dataset.bfont);
+  });
+
+  sizeRow.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-size]');
+    if (b) setOpt('headingSize', b.dataset.size);
   });
 
   weightRow.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-weight]');
-    if (btn) setOption('weight', btn.dataset.weight);
+    const b = e.target.closest('[data-weight]');
+    if (b) setOpt('weight', b.dataset.weight);
   });
 
   textColorRow.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-textcolor]');
-    if (btn) setOption('textColor', btn.dataset.textcolor);
+    const b = e.target.closest('[data-textcolor]');
+    if (b) setOpt('textColor', b.dataset.textcolor);
   });
 
-  function notifyContentScript() {
+  function notify() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'updateStyles' });
-      }
+      if (tabs[0]) chrome.tabs.sendMessage(tabs[0].id, { action: 'updateStyles' });
     });
   }
 });

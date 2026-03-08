@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Ghostwrite Design System",
-  "version": "1.0.0",
-  "description": "Applies the Ghostwrite luxury design language to any website. Optimized for Notion and GitHub.",
+  "name": "Luminous Luxury",
+  "version": "2.0.0",
+  "description": "We class up the internet — gratis from Luminous Prosperity.",
   "permissions": ["storage", "activeTab"],
   "action": {
     "default_popup": "popup.html",
